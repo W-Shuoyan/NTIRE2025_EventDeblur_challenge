@@ -1,0 +1,51 @@
+# general settings
+name: 15_WEI_test  # add debug for quick debug
+model_type: WEI_test_model
+num_gpu:  1 #4
+manual_seed: 10
+
+# tile: # use the tile mode for limited GPU memory when testing.
+#   tile_size: 512 # the higher, the more utilized GPU memory and the less performance change against the full image. must be an integer multiple of the window size.
+#   tile_pad: 32 # overlapping between adjacency patches.must be an integer multiple of the window size.
+
+print_flops: true # TODO: set to true to print flops
+flops_input_shape: # TODO: keep spatial shape to 256x256, and set your own channel for events or images
+  - [3, 256, 256] # image shape
+  - [9, 2, 256, 256] # event shape
+
+datasets:
+  test:
+    name: highrev-test
+    type: HighREV_test_dataset
+    dataroot: /opt/data/private/wsy/Datasets/HighREV_test
+
+    moment_events: 9
+    norm_voxel: false 
+
+    io_backend:
+      type: disk
+
+dataset_name: HighREV
+
+# network structures
+network_g:
+  type: FinalBidirectionAttenfusion_WEI
+  img_chn: 3
+  ev_chn: 2
+  num_encoders: 3
+  base_num_channels: 32
+  num_block: 1
+  num_residual_blocks: 2
+
+# path
+path:
+  pretrain_network_g: model_zoo/15_WEI-base.pth
+  pretrain_network_g_finetune: model_zoo/15_WEI-finetune.pth
+  strict_load_g: true
+  root: /opt/data/private/wsy/NTIRE2025_EventDeblur_challenge
+
+# validation settings
+val:
+  save_img: true
+  save_gt: false
+  cal_metrics: false

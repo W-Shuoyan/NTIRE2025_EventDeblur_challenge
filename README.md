@@ -1,11 +1,11 @@
-# [NTIRE 2025 the First Challenge on Event-Based Deblurring](https://codalab.lisn.upsaclay.fr/competitions/21498) @ [CVPR 2025](https://cvlai.net/ntire/2025/)
+# [NTIRE 2025 the First Challenge on Event-Based Deblurring](https://codalab.lisn.upsaclay.fr/competitions/21498) @ [Team: WEI](https://cvlai.net/ntire/2025/)
 
 <p align="center">
   <img src="./figs/logo.jpg" alt="Logo" width="600">
 </p>
 
 
-This is a simple introduction to the dataset and basic codes.
+This is a simple introduction to our method.
 
 ## Downloading Testset
 ### Blurry images and Raw events
@@ -58,10 +58,43 @@ By using `./basicsr/utils/npz2voxel.py` you can convert raw events to voxel grid
 `./basicsr/data/npz_image_dataset.py` for processing raw events.
 `./basicsr/data/voxelnpz_image_dataset.py` for processing voxel grids.
 
+## Dependencies
+
+- [Python 3.9.21](https://www.python.org/downloads/release/python-3921/)
+- [CUDA Toolkit 11.3.1](https://developer.nvidia.com/cuda-11-3-1-download-archive)
+- [PyTorch 1.11.0](https://pytorch.org/get-started/previous-versions/#v1110)
+
+```shell
+git clone https://github.com/W-Shuoyan/NTIRE2025_EventDeblur_challenge
+cd NTIRE2025_EventDeblur_challenge
+pip install -r requirements.txt
+python setup.py develop --no_cuda_ext
+```
+
+## Training
+
+The training of our model requires two steps: 1) Normal training on the all HighREV training dataset to obtain the baseline model weights; 2) Fine-tuning on the “sternwatz_window” sequence (double brightness) in the HighREV training dataset to obtain the finetune model weights.
 
 
+```shell
+# Step 1
+python basicsr/train.py -opt options/train/HighREV/15_WEI_train.yml
+# Step 2
+python basicsr/train.py -opt options/train/HighREV/15_WEI_finetune.yml
+```
 
-## How to start training?
+
+## Test
+
+We use the ensemble strategy to test the model on the HighREV test dataset. You can get all the test output by running just one command below:
+
+
+```shell
+python basicsr/test.py -opt options/test/HighREV/15_WEI_test.yml
+```
+
+
+<!-- ## How to start training?
 
 We provide a simple codebase here:
 
@@ -98,17 +131,17 @@ flops_input_shape:
   - [6, 256, 256] # event shape
 ```
 
-Be sure to modify the path configurations in yml file.
+Be sure to modify the path configurations in yml file. -->
 
 
 
-## Develop your own model
+<!-- ## Develop your own model
 We recommand to used basicsr (already used here, [tutorial](https://github.com/XPixelGroup/BasicSR)) for developing. It is easy to change the models in `./basicsr/models`.
 
 
 
 ## Use your own codes
-The dataset-related code is in `./basicsr/data/npz_image_dataset.py`. If you are not using the code from this repository, please integrate it into your own code for convenience.
+The dataset-related code is in `./basicsr/data/npz_image_dataset.py`. If you are not using the code from this repository, please integrate it into your own code for convenience. -->
 
 
 ## Others

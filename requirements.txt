@@ -1,7 +1,7 @@
 addict
 future
 lmdb
-numpy
+numpy==1.22.4
 opencv-python
 Pillow
 pyyaml
@@ -12,3 +12,7 @@ tb-nightly
 tqdm
 yapf
 h5py
+torch==1.11.0+cu113
+torchvision
+einops
+timm
